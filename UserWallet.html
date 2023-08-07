@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        :root {
+            --primary-color: #003B73;
+            --secondary-color: #FFF;
+            --tertiary-color: #4a4a4a;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #003B73;
+            padding: 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #logo img {
+            height: 60px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            text-decoration: none;
+            background-color: #007ACC;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #005999;
+        }
+
+        main {
+            padding: 20px;
+            flex: 1;
+        }
+
+        #wallet {
+            border-radius: 5px;
+            background-color: #f6f6f6;
+            padding: 20px;
+        }
+
+    
+        #profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #003B73;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        #logoContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        #logo {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        #profileContainer {
+    
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+#profileMenu {
+display: none;
+position: absolute;
+right: 0;
+top: 100%;
+background-color: #f9f9f9;
+min-width: 160px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+}
+
+#profileMenu button {
+color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+width: 100%;
+text-align: left;
+border: none;
+background: none;
+}
+
+        #profileMenu button:hover {background-color: #f1f1f1;}
+    </style>
+</head>
+<body>
+    <header>
+        <div id="logoContainer">
+            <img src="logo.png" alt="Logo" id="logo">
+            <h1>QuickPayConnect</h1>
+        </div>
+
+        <div id="profileContainer">
+            <img src="profile.jpg" alt="Profile" id="profile" onclick="displayProfileMenu()">
+            <div id="profileMenu">
+                <button onclick="window.location.href='Profile.html'">Profile</button>
+                <button onclick="window.location.href='Settings.html'">Settings</button>
+                <button onclick="window.location.href='Logout.html'">Logout</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div id="wallet">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>User's Wallet</h2>
+        </div>
+            
+        </div>
+        <div id="balance">
+            <h3>Current Balance in SGD: <span id="balanceAmount">****</span></h3>
+            <button class="cta-button" onclick="toggleBalance()">Hide/Reveal Amount</button>
+        </div>
+        <div id="transactions">
+            <h3>Check Transactions</h3>
+            <button class="cta-button" onclick="window.location.href='CheckTransaction.html'">Go to Transactions</button>
+        </div>
+        <div id="transfer">
+            <h3>Transfer Money</h3>
+            <button class="cta-button" onclick="window.location.href='QuickPay.html'">QuickPay</button>
+            <button class="cta-button" onclick="window.location.href='LocalTransfer.html'">Local Transfer</button>
+            <button class="cta-button" onclick="window.location.href='ExchangeCurrency.html'">Exchange Currency</button>
+            <button class="cta-button" onclick="window.location.href='Overseas.html'">Overseas</button>
+            <button class="cta-button" onclick="window.location.href='Schedule.html'">Schedule</button>
+        </div>
+            <p>Note: To protect our customers and prevent money laundering, daily and monthly transaction limits are in place. Our advanced fraud detection system monitors your account for any unusual activity.</p>
+        </div>
+    </main>
+    <script>
+        let isBalanceVisible = false;
+    
+        function toggleBalance() {
+            let balance = localStorage.getItem('balance') || '1000.00';
+            const balanceElement = document.getElementById('balanceAmount');
+            if (isBalanceVisible) {
+                balanceElement.innerText = '****';
+                isBalanceVisible = false;
+            } else {
+                balanceElement.innerText = balance;
+                isBalanceVisible = true;
+            }
+        }
+    
+        function displayProfileMenu() {
+            var profileMenu = document.getElementById('profileMenu');
+            profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+        }
+    
+        function handleClickOutside(event) {
+            var profileMenu = document.getElementById('profileMenu');
+            var profile = document.getElementById('profile');
+    
+            if (!profileMenu.contains(event.target) && !profile.contains(event.target)) {
+                profileMenu.style.display = 'none';
+            }
+        }
+        document.addEventListener('click', handleClickOutside);
+    
+        window.onload = toggleBalance;
+    </script>
+
+
+    </script>
+    <footer>
+        <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
+        <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
+    </footer>
+</body>
+</html>

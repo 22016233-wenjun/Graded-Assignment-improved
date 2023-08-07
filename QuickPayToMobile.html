@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QuickPay to Mobile</title>
+    <style>
+        body {
+            background-color: #f5f5f5; 
+            color: #333; 
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #0A2240; 
+            color: #FFFFFF;
+        }
+
+        #logo {
+            height: 50px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-left: auto; 
+        }
+
+        nav a {
+            color: #FFFFFF; 
+            text-decoration: none;
+            padding: 5px 10px;
+            min-width: 100px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #0F4471; 
+        }
+
+        #profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        #profileContainer {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        #profileMenu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        #profileMenu button {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: none;
+        }
+
+        #profileMenu button:hover {background-color: #f1f1f1;}
+
+        main {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+        }
+
+        label, input[type="number"], input[type="tel"] {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: #0A2240; 
+            color: #FFFFFF; 
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0F4471; 
+        }
+
+        footer {
+            background-color: #0A2240; 
+            color: #FFFFFF; 
+            text-align: center;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            header, nav {
+                flex-direction: column;
+            }
+
+            main {
+                flex-direction: column;
+            }
+
+            form {
+                width: 80%;
+            }
+        }
+        #current-balance {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        #current-balance.error {
+            color: red;
+        }
+    </style>
+</head>
+<body onclick="handleClickOutside(event);">
+    <header>
+        <img src="logo.png" alt="QuickPayConnect Logo" id="logo">
+        <h1>QuickPayConnect</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="AboutUs.html">About Us</a>
+            <a href="UserWallet.html">User Wallet</a>
+            <div id="profileContainer">
+                <img src="profile.jpg" alt="Profile" id="profile" onclick="displayProfileMenu()">
+                <div id="profileMenu">
+                    <button onclick="window.location.href='Profile.html'">Profile</button>
+                    <button onclick="window.location.href='Settings.html'">Settings</button>
+                    <button onclick="window.location.href='Logout.html'">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <form id="quickpay-form" onsubmit="event.preventDefault(); validateAndSubmit();">
+            <h2>QuickPay to Mobile</h2>
+            <div id="current-balance">Current balance: $1000.00</div>
+            <label for="country-code">Country:</label><br>
+            <select id="country-code">
+                <option value="SG">SG</option>
+                <option value="US">US</option>
+                <option value="MY">MY</option>
+                <option value="CHN">CHN</option>
+                <option value="JPN">JPN</option>
+                <option value="KR">KR</option>
+            </select><br>
+            <label for="mobile-number">Mobile Number:</label><br>
+            <input type="tel" id="mobile-number" name="mobile-number"><br>
+            <label for="amount">Amount:</label><br>
+            <input type="number" id="amount" name="amount" min="1" oninput="updateBalance()"><br>
+            <input type="submit" value="Send Money">
+        </form>
+    </main>
+    <script>
+        function displayProfileMenu() {
+    var profileMenu = document.getElementById('profileMenu');
+    profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+}
+window.onload = function() {
+            updateDisplayedBalance();
+        };
+
+        function updateDisplayedBalance() {
+            const balance = parseFloat(localStorage.getItem('balance')) || 0;
+            document.getElementById('current-balance').innerText = 'Current balance: $' + balance.toFixed(2);
+        }
+
+        function updateBalance() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const balance = parseFloat(localStorage.getItem('balance')) || 0;
+            const newBalance = balance - amount;
+
+            if (newBalance < 0) {
+                document.getElementById('current-balance').classList.add('error');
+            } else {
+                document.getElementById('current-balance').classList.remove('error');
+            }
+
+            document.getElementById('current-balance').innerText = 'Current balance: $' + newBalance.toFixed(2);
+        }
+
+function validateAndSubmit() {
+    const country = document.getElementById('country-code').value;
+    const mobile = document.getElementById('mobile-number').value;
+    const amount = document.getElementById('amount').value;
+
+    const phoneRegexes = {
+        SG: /^(\+65)?[689]\d{7}$/,
+        US: /^(\+1)?[2-9]\d{2}[2-9](?!11)\d{6}$/,
+        MY: /^(\+60)?[1-9]\d{7,9}$/,
+        CHN: /^(\+86)?1[3-9]\d{9}$/,
+        JPN: /^(\+81)?0[5-9]0\d{8}$/,
+        KR: /^(\+82)?01[016789]\d{7,8}$/
+    };
+
+    if (!phoneRegexes[country].test(mobile)) {
+        alert('Invalid phone number for ' + country);
+        return;
+    }
+
+    const currentBalance = parseFloat(localStorage.getItem('balance')) || 0;
+    if (currentBalance < amount) {
+        alert('Insufficient balance');
+        return;
+    }
+
+    localStorage.setItem('balance', currentBalance - amount);
+            updateDisplayedBalance();
+
+            alert('Payment submitted successfully!');
+            window.location.href = 'PaymentConfirmation.html';
+}
+
+document.addEventListener('click', function(event) {
+    var profileMenu = document.getElementById('profileMenu');
+    var profile = document.getElementById('profile');
+    if (!profileMenu.contains(event.target) && !profile.contains(event.target)) {
+        profileMenu.style.display = 'none';
+    }
+});
+
+
+    </script>
+    <footer>
+        <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
+        <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
+    </footer>
+</body>
+</html>

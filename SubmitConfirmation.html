@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transfer Confirmation</title>
+    <style>
+        body {
+            background-color: #f5f5f5; 
+            color: #333; 
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #0A2240; 
+            color: #FFFFFF;
+        }
+
+        #logo {
+            height: 50px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-left: auto;
+        }
+
+        nav a {
+            color: #FFFFFF; 
+            text-decoration: none;
+            padding: 5px 10px;
+            min-width: 100px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #0F4471; 
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #confirmation {
+            background-color: #0A2240;
+            color: #FFFFFF; 
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #confirmation h2 {
+            margin-bottom: 20px;
+        }
+
+        #confirmation button {
+            background-color: #0A2240; 
+            color: #FFFFFF;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #confirmation button:hover {
+            background-color: #0F4471; 
+        }
+
+        footer {
+            background-color: #0A2240; 
+            color: #FFFFFF; 
+            text-align: center;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            header, nav {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="QuickPayConnect Logo" id="logo">
+        <h1>QuickPayConnect</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="AboutUs.html">About Us</a>
+            <a href="UserWallet.html">User Wallet</a>
+        </nav>
+    </header>
+    <main>
+        <div id="confirmation">
+            <h2>Transfer Successful!</h2>
+            <p>You have successfully transferred the money.</p>
+            <button onclick="window.location.href='UserWallet.html'">Back to Wallet</button>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
+        <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
+    </footer>
+</body>
+</html>

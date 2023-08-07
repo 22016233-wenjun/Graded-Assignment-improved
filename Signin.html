@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        :root {
+            --primary-color: #003B73;
+            --secondary-color: #FFF;
+            --tertiary-color: #4a4a4a;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--tertiary-color);
+            font-family: var(--font);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        nav a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        nav a:hover {
+            color: var(--tertiary-color);
+        }
+
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #logo {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        input, button {
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input {
+            border: 1px solid var(--tertiary-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #147bc1;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="AboutUs.html">About Us</a>
+        
+    </nav>
+    <header>
+        <img src="logo.png" alt="Logo" id="logo">
+        <h1>QuickPayConnect</h1>
+    </header>
+    <main>
+        <form id="signinForm">
+            <label for="nric">Last 5 digits of NRIC:</label>
+            <input type="text" id="nric" name="nric" required>
+            <span id="nricError" class="error"></span>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <span id="passwordError" class="error"></span>
+
+            <button type="submit">Sign In</button>
+            <a href="ForgotPassword.html" style="text-decoration: underline; margin-top: 10px; display: inline-block;">Forgot Password</a>
+            <p>Note: For your security, two-factor authentication (2FA) is enabled on all accounts.</p>
+        </form>
+    </main>
+    <script>
+        const nricInput = document.getElementById('nric');
+        const passwordInput = document.getElementById('password');
+        const nricError = document.getElementById('nricError');
+        const passwordError = document.getElementById('passwordError');
+
+        document.getElementById('signinForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    let hasError = false;
+
+    let userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+    if (userDetails) {
+        if (nricInput.value !== userDetails.nric.slice(-5)) {
+            nricError.textContent = 'Invalid NRIC. Please enter the last 5 digits of your NRIC.';
+            hasError = true;
+        } else {
+            nricError.textContent = '';
+        }
+
+        if (passwordInput.value !== userDetails.password) {
+            passwordError.textContent = 'Invalid password. Please enter the correct password.';
+            hasError = true;
+        } else {
+            passwordError.textContent = '';
+        }
+    } else {
+        nricError.textContent = 'No user details found. Please sign up first.';
+        passwordError.textContent = '';
+        hasError = true;
+    }
+
+    if (!hasError) {
+        window.location.href = 'UserWallet.html';
+    }
+        });
+
+        function validateNRIC(nric) {
+            var re = /^[A-Z0-9]{5}$/;
+            return re.test(nric);
+        }
+
+        function validatePassword(password) {
+            var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+            return re.test(password);
+        }
+    </script>
+    <footer>
+        <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
+        <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
+    </footer>
+</body>
+</html>

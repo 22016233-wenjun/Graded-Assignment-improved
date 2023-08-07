@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #003B73;
+            color: #FFFBCC;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #logo {
+            height: 50px;
+        }
+
+        #headerAux {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0;
+        }
+
+        #walletContainer {
+            margin: 0 10px;
+        }
+
+        #walletContainer button {
+            background-color: #FFFBCC; 
+            color: #003B73;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #walletContainer button:hover {
+            background-color: #fddcb1;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #transferForm {
+            flex: 1;
+            background-color: #fff;
+            color: #003B73; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #transferForm h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        #transferForm input[type="text"], #transferForm input[type="number"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        #transferForm button {
+            background-color: #FFFBCC; 
+            color: #003B73;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        #transferForm button:hover {
+            background-color: #fddcb1;
+        }
+
+        footer {
+            background-color: #003B73; 
+            color: #FFFBCC; 
+            text-align: center;
+            padding: 10px;
+        }
+
+        #profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        #profileContainer {
+    
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+#profileMenu {
+display: none;
+position: absolute;
+right: 0;
+top: 100%;
+background-color: #f9f9f9;
+min-width: 160px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+}
+
+#profileMenu button {
+color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+width: 100%;
+text-align: left;
+border: none;
+background: none;
+}
+
+#profileMenu button:hover {background-color: #f1f1f1;}
+        .feedback { display: none; color: red; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo" id="logo">
+        <h1>QuickPayConnect</h1>
+        <div id="headerAux">
+            <div id="walletContainer">
+                <button onclick="window.location.href='UserWallet.html'">Back to Wallet</button> 
+            </div>
+        </div>
+        <div id="profileContainer">
+            <img src="profile.jpg" alt="Profile" id="profile" onclick="displayProfileMenu()">
+            <div id="profileMenu">
+                <button onclick="window.location.href='Profile.html'">Profile</button>
+                <button onclick="window.location.href='Settings.html'">Settings</button>
+                <button onclick="window.location.href='Logout.html'">Logout</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div id="transferForm">
+            <h2>Local Transfer</h2>
+            <label for="recipient">Recipient:</label><br>
+            <input type="text" id="recipient" name="recipient" required><br>
+            <span id="recipientError" class="feedback">Recipient is required!</span>
+            <label for="amount">Amount (SGD):</label><br>
+            <input type="number" id="amount" name="amount" min="1" required><br>
+            <span id="amountError" class="feedback">Amount should be greater than 0!</span>
+            <span id="balanceError" class="feedback">Insufficient balance!</span>
+            <button type="button" onclick="validateAndSubmit()">Submit</button>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
+        <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
+    </footer>
+    <script>
+        let balance = parseFloat(localStorage.getItem('balance')) || 1000; 
+    
+        function displayProfileMenu() {
+            var profileMenu = document.getElementById('profileMenu');
+            profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+        }
+    
+        function validateAndSubmit() {
+            const recipient = document.getElementById('recipient');
+            const amount = document.getElementById('amount');
+            const recipientError = document.getElementById('recipientError');
+            const amountError = document.getElementById('amountError');
+            const balanceError = document.getElementById('balanceError');
+            
+            let isValid = true;
+    
+            if (recipient.value.trim() === "") {
+                isValid = false;
+                recipientError.style.display = 'block';
+            } else {
+                recipientError.style.display = 'none';
+            }
+    
+            if (amount.value <= 0) {
+                isValid = false;
+                amountError.style.display = 'block';
+            } else {
+                amountError.style.display = 'none';
+            }
+    
+            if (amount.value > balance) {
+                isValid = false;
+                balanceError.style.display = 'block';
+            } else {
+                balanceError.style.display = 'none';
+            }
+    
+            if (isValid) {
+                balance -= amount.value; 
+                localStorage.setItem('balance', balance.toFixed(2));
+                alert(`Transfer of SGD ${amount.value} to ${recipient.value} is successful. Your new balance is SGD ${balance.toFixed(2)}`);
+                window.location.reload();
+            }
+        }
+        function handleClickOutside(event) {
+            var profileMenu = document.getElementById('profileMenu');
+            var profile = document.getElementById('profile');
+        
+            if (!profileMenu.contains(event.target) && !profile.contains(event.target)) {
+                profileMenu.style.display = 'none';
+            }
+        }
+
+        if (isValid) {
+            balance -= amount.value; 
+            localStorage.setItem('balance', balance.toFixed(2));
+            
+            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            let newTransaction = `-SGD ${amount.value} (Payment to ${recipient.value})`;
+            transactions.push(newTransaction);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+
+            alert(`Transfer of SGD ${amount.value} to ${recipient.value} is successful. Your new balance is SGD ${balance.toFixed(2)}.`);
+            window.location.href = 'UserWallet.html';
+        }
+        
+    </script>
+    
+</body>
+</html>

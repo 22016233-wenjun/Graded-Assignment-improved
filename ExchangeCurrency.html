@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #003B73;
+            color: #FFFBCC;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #logo {
+            height: 50px;
+        }
+
+        #headerAux {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        #walletContainer button {
+            background-color: #FFFBCC; 
+            color: #003B73;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #walletContainer button:hover {
+            background-color: #fddcb1; /* Changes the button color when hovered */
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #exchange {
+            flex: 1;
+            background-color: #fff;
+            color: #003B73; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+
+        #exchange h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        #profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        #exchange form, #balance {
+            background-color: #f4f4f4; 
+            color: #003B73;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        #exchange button {
+            background-color: #003B73; 
+            color: #FFFBCC;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #exchange button:hover {
+            background-color: #23588c;
+        }
+
+        #balance h3 {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #003B73; 
+            color: #FFFBCC; 
+            text-align: center;
+            padding: 10px;
+        }
+        #successMessage {
+            display: none;
+            color: green;
+            margin-bottom: 20px;
+        }
+
+        #profileContainer {
+            position: relative;
+            display: inline-block;
+        }
+
+        #profileMenu {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        #profileMenu button {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: none;
+        }
+
+        #profileMenu button:hover {background-color: #f1f1f1;}
+
+        @media only screen and (max-width: 600px) {
+            body {
+                flex-direction: column;
+            }
+
+            header, main {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #exchange {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo" id="logo">
+        <h1>QuickPayConnect</h1>
+    </header>
+    <main>
+        <div id="exchange">
+            <h2>Exchange Currency</h2>
+            <div id="profileContainer">
+                <img src="profile.jpg" alt="Profile" id="profile" onclick="displayProfileMenu()">
+                <div id="profileMenu">
+                    <button onclick="window.location.href='Profile.html'">Profile</button>
+                    <button onclick="window.location.href='Settings.html'">Settings</button>
+                    <button onclick="window.location.href='Logout.html'">Logout</button>
+                </div>
+            </div>
+            <form id="exchangeForm">
+                <label for="amount">Amount:</label><br>
+                <input type="number" id="amount" name="amount" min="1" max="1000"><br>
+                <label for="fromCurrency">From Currency:</label><br>
+                <select id="fromCurrency" name="fromCurrency">
+                    <option value="sgd">SGD</option>
+                    <option value="usd">USD</option>
+                    <option value="rmb">RMB</option>
+                    <option value="rm">RM</option>
+                    <option value="won">WON</option>
+                    <option value="yen">YEN</option>
+                </select><br>
+                <label for="toCurrency">To Currency:</label><br>
+                <select id="toCurrency" name="toCurrency">
+                    <option value="sgd">SGD</option>
+                    <option value="usd">USD</option>
+                    <option value="rmb">RMB</option>
+                    <option value="rm">RM</option>
+                    <option value="won">WON</option>
+                    <option value="yen">YEN</option>
+                </select><br>
+                <button type="button" onclick="exchangeCurrency()">Exchange</button>
+            </form>
+            <p id="successMessage">Your currency exchange was successful!</p>
+            <div id="balance">
+            <div id="balance">
+                <h3>Your Balance:</h3>
+                <p id="balanceSGD">SGD: 1000.00</p>
+                <p id="balanceUSD">USD: 100.00</p>
+                <p id="balanceRMB">RMB: 500.00</p>
+                <p id="balanceRM">RM: 750.00</p>
+                <p id="balanceWON">WON: 500000.00</p>
+                <p id="balanceYEN">YEN: 20000.00</p>
+            </div>
+            <button onclick="window.location.href='UserWallet.html'">Back to Wallet</button>
+        </div>
+    </main>
+
+    <script>
+        var exchangeRates = {
+            sgd: 1,
+            usd: 0.74,
+            rmb: 4.73,
+            rm: 3.12,
+            won: 891.23,
+            yen: 81.97
+        };
+    
+        var balances = {
+            sgd: 1000.00,
+            usd: 100.00,
+            rmb: 500.00,
+            rm: 750.00,
+            won: 500000.00,
+            yen: 20000.00
+        };
+
+        function displayProfileMenu() {
+            var profileMenu = document.getElementById('profileMenu');
+            profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+        }
+    
+        function exchangeCurrency() {
+            var amount = parseFloat(document.getElementById('amount').value);
+            var fromCurrency = document.getElementById('fromCurrency').value;
+            var toCurrency = document.getElementById('toCurrency').value;
+
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a positive amount to exchange.');
+                return;
+            }
+            if (balances[fromCurrency] < amount) {
+                alert('Insufficient balance to perform this operation.');
+                return;
+            }
+    
+            var exchangedAmount = amount * exchangeRates[fromCurrency] / exchangeRates[toCurrency];
+    
+            balances[fromCurrency] -= amount;
+            balances[toCurrency] += exchangedAmount;
+    
+            document.getElementById('balanceSGD').textContent = 'SGD: ' + balances['sgd'].toFixed(2);
+            document.getElementById('balanceUSD').textContent = 'USD: ' + balances['usd'].toFixed(2);
+            document.getElementById('balanceRMB').textContent = 'RMB: ' + balances['rmb'].toFixed(2);
+            document.getElementById('balanceRM').textContent = 'RM: ' + balances['rm'].toFixed(2);
+            document.getElementById('balanceWON').textContent = 'WON: ' + balances['won'].toFixed(2);
+            document.getElementById('balanceYEN').textContent = 'YEN: ' + balances['yen'].toFixed(2);
+    
+            document.getElementById('exchangeForm').reset();
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(function() {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);  
+        }
+    </script>
+    <footer>
+        <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
+        <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
+    </footer>
+</body>
+</html>

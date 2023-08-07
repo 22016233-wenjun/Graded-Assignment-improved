@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    
+        header {
+            background-color: #003B73;
+            color: #FFFBCC;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        #logo {
+            height: 50px;
+        }
+    
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+    
+        #recipients, #options {
+            flex: 1;
+            background-color: #fff;
+            color: #003B73;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+    
+        #recipients h2, #options h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+    
+        #profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+    
+        #recipientsList, #optionsList {
+            background-color: #f4f4f4;
+            color: #003B73;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    
+        #recipientsList ul, #optionsList ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    
+        #recipientsList li, #optionsList li {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+    
+        #optionsList button {
+            background-color: #304c60;
+            color: #FFFBCC;
+            border: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+    
+        #optionsList button:hover {
+            background-color: #005999;
+        }
+    
+        footer {
+            background-color: #003B73;
+            color: #FFFBCC;
+            text-align: center;
+            padding: 10px;
+        }
+        #profileContainer {
+             display: flex;
+             justify-content: right;
+             padding: 20px;
+}
+
+        #UserwalletContainer {
+             display: flex;
+             justify-content: left;
+             padding: 20px;
+
+        }
+             
+             #headerAux {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        #UserwalletContainer button {
+            background-color: rgb(50, 63, 177); 
+            color: white; 
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #UserwalletContainer button:hover {
+            background-color: darkgreen; 
+        }
+
+        
+    </style>
+    </head>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo" id="logo">
+        <h1>QuickPayConnect</h1>
+    </header>
+    <div id="headerAux">
+        <div id="UserwalletContainer">
+            <button onclick="window.location.href='UserWallet.html'">Return to User Wallet</button> 
+        </div>
+        <div id="profileContainer">
+            <img src="profile.jpg" alt="Profile" id="profile" onclick="window.location.href='Profile.html'">
+        </div>
+    </div>
+    </body>
+    <main>
+        <div id="recipients">
+            <h2>Recipients</h2>
+            <div id="recipientsList">
+                <ul>
+                    <li>Michael Jackson</li>
+                    <li>Wen Jun</li>
+                    <li>Boss</li>
+                </ul>
+            </div>
+            <button onclick="addRecipient()">Add Recipient</button>
+        </div>
+        <div id="options">
+            <h2>QuickPay Options</h2>
+            <div id="optionsList">
+                <button onclick="window.location.href='QuickPayToMobile.html'">QuickPay to Mobile</button>
+                <button onclick="window.location.href='QuickPayToNRIC_FIN.html'">QuickPay to NRIC/FIN</button>
+                <button onclick="window.location.href='QuickPayToUEN.html'">QuickPay to UEN</button>
+                <button onclick="window.location.href='QuickPayToVPA.html'">QuickPay to VPA</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        window.onload = function() {
+            var recipients = localStorage.getItem('recipients');
+            if (recipients) {
+                recipients = JSON.parse(recipients);
+                var ul = document.querySelector("#recipientsList ul");
+                recipients.forEach(function(recipient) {
+                    var li = document.createElement("li");
+                    li.textContent = recipient;
+                    ul.appendChild(li);
+                });
+            }
+        }
+
+        function addRecipient() {
+            var recipient = prompt("Enter the name of the new recipient:");
+            if (recipient) {
+                var li = document.createElement("li");
+                li.textContent = recipient;
+                document.querySelector("#recipientsList ul").appendChild(li);
+
+                var recipients = localStorage.getItem('recipients');
+                if (recipients) {
+                    recipients = JSON.parse(recipients);
+                } else {
+                    recipients = [];
+                }
+
+                recipients.push(recipient);
+                localStorage.setItem('recipients', JSON.stringify(recipients));
+            }
+        }
+    </script>
+    <footer>
+        <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
+        <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
+    </footer>
+</body>
+</html>
