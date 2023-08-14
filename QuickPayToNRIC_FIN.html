@@ -77,7 +77,45 @@ nav a:hover {
         .logo {
     max-width: 50px; 
     height: auto;
-}
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: #003B73;
+            box-shadow: 0 0 5px rgba(0, 59, 115, 0.2);
+        }
+        .btn {
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn:hover {
+            background-color: #005199;
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +126,6 @@ nav a:hover {
         
             <a href="index.html">Home</a>
             <a href="QuickPay.html">QuickPay</a>
-            <a href="QuickPayToNRIC_FIN.html" class="active">QuickPay to NRIC/FIN</a></li>
             <a href="contact.html">Contact</a>
         
     </nav>
@@ -99,12 +136,14 @@ nav a:hover {
     <form id="quickpay-form">
         <div class="input-group">
             <label for="nric-fin">NRIC/FIN:</label>
-            <input type="text" id="nric-fin" name="nric-fin" required>
+            <input type="text" id="nric-fin" name="nric-fin" required pattern="^[STFG]\d{7}[A-Z]$">
+            <span class="error-message">Please enter a valid NRIC/FIN number</span>
         </div>
 
         <div class="input-group">
             <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" min="0" required>
+            <input type="number" id="amount" name="amount" required>
+            <span class="error-message">Amount should be greater than zero</span>
         </div>
 
         <div class="input-group">
@@ -112,11 +151,50 @@ nav a:hover {
         </div>
     </form>
 </main>
-
 <footer>
     <p>&copy; 2023 QuickPayConnect. All rights reserved.</p>
     <p>Note: This website uses a secure connection (SSL/TLS) to protect your data.</p>
 </footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('quickpay-form');
+    const nricInput = document.getElementById('nric-fin');
+    const amountInput = document.getElementById('amount');
+    const nricErrorMessage = nricInput.nextElementSibling;
+    const amountErrorMessage = amountInput.nextElementSibling;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let hasError = false;
+
+        const nricValue = nricInput.value.trim();
+        if (nricValue.length !== 9 || !/^[STFG]\d{7}[A-Z]$/.test(nricValue)) {
+            nricErrorMessage.textContent = 'Invalid NRIC/FIN format. It should start with S, T, F, or G followed by 7 digits and end with a letter.';
+            nricErrorMessage.style.display = 'block';
+            hasError = true;
+        } else {
+            nricErrorMessage.style.display = 'none';
+        }
+
+        const amountValue = parseFloat(amountInput.value);
+        if (isNaN(amountValue) || amountValue < 0.01) {
+            amountErrorMessage.textContent = 'Please enter a valid amount greater than or equal to 0.01.';
+            amountErrorMessage.style.display = 'block';
+            hasError = true;
+        } else {
+            amountErrorMessage.style.display = 'none';
+        }
+
+        if (!hasError) {
+            alert('Payment successful!');  
+            form.reset();
+        }
+    });
+});
+</script>
+
 
 </body>
 </html>
